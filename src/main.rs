@@ -1,10 +1,12 @@
 mod elision;
 mod generic_static;
 mod specifier;
+mod structs;
 use generic_static::pick_num;
 use specifier::pick_num as pick;
 
 use elision::{return_str, return_str_with_multi};
+use structs::ArrayProcessor;
 
 fn main() {
     let num1 = 5;
@@ -27,4 +29,12 @@ fn main() {
     println!("{str1_return_output}");
     println!("With multi {str1_return_with_multi_output}");
     // ** Elision **
+
+    // ** Structs ** //
+    let mut some_data = ArrayProcessor { data: &[1, 2, 3] };
+    println!("Array Processor: {:?}", some_data.data);
+    let new_data = [4, 5, 6];
+    some_data.update_data(&new_data);
+    println!("Array Processor: {:?}", some_data.data);
+    // ** Structs ** //
 }
