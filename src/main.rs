@@ -1,11 +1,15 @@
+mod box_smart_pointer;
 mod elision;
 mod generic_static;
 mod specifier;
 mod structs;
+
+use box_smart_pointer::{
+    AudioSample, Huge_data, ImageFile, List, ListNode, Media, Small_Data, Storage,
+};
+use elision::{return_str, return_str_with_multi};
 use generic_static::pick_num;
 use specifier::pick_num as pick;
-
-use elision::{return_str, return_str_with_multi};
 use structs::ArrayProcessor;
 
 fn main() {
@@ -37,4 +41,51 @@ fn main() {
     some_data.update_data(&new_data);
     println!("Array Processor: {:?}", some_data.data);
     // ** Structs ** //
+
+    // ** Smart Pointers
+    let x = 0.666;
+    let y = Box::new(x);
+    let list = List::Cons(
+        1,
+        Some(Box::new(List::Cons(2, Some(Box::new(List::Cons(3, None)))))),
+    );
+    println!("List: {:?}", list);
+
+    let data1 = Huge_data;
+    let data2 = Box::new(Huge_data);
+
+    let data3 = data1;
+    let data4 = data2.clone();
+
+    println!("Data 1: {:?}", data1);
+    println!("Data 2: {:?}", data2);
+    println!("Data 3: {:?}", data3);
+    println!("Data 4: {:?}", data4);
+
+    let data5 = Box::new(Small_Data);
+
+    let all: Vec<Box<dyn Storage>> = vec![Box::new(data1), Box::new(data3), data5];
+
+    let nodes = ListNode::Node(
+        1,
+        Box::new(ListNode::Node(
+            2,
+            Box::new(ListNode::Node(
+                3,
+                Box::new(ListNode::Node(4, Box::new(ListNode::None))),
+            )),
+        )),
+    );
+    println!("{:?}", nodes);
+
+    let audio_1 = AudioSample;
+    let audio_2 = Box::new(AudioSample);
+
+    let audio_3 = audio_1;
+    let audio_4 = audio_2;
+
+    let image_1 = Box::new(ImageFile);
+
+    let media_collection: Vec<Box<dyn Media>> = vec![Box::new(audio_3), audio_4, image_1];
+    // ** Smart Pointers
 }
