@@ -1,6 +1,7 @@
 mod box_smart_pointer;
 mod elision;
 mod generic_static;
+mod smar_pointer;
 mod specifier;
 mod structs;
 
@@ -11,6 +12,9 @@ use elision::{return_str, return_str_with_multi};
 use generic_static::pick_num;
 use specifier::pick_num as pick;
 use structs::ArrayProcessor;
+
+use smar_pointer::RcList;
+use std::rc::Rc;
 
 fn main() {
     let num1 = 5;
@@ -88,4 +92,16 @@ fn main() {
 
     let media_collection: Vec<Box<dyn Media>> = vec![Box::new(audio_3), audio_4, image_1];
     // ** Smart Pointers
+
+    // ** RC . Smart Pointers
+    let a = Rc::new(RcList::Cons(1, Some(Rc::new(RcList::Cons(2, None)))));
+    println!("Ref count after a: {}", Rc::strong_count(&a));
+    {
+        let b = RcList::Cons(3, Some(Rc::clone(&a)));
+        println!("Ref count after b: {}", Rc::strong_count(&a));
+        let c = RcList::Cons(4, Some(Rc::clone(&a)));
+        println!("Ref count after c: {}", Rc::strong_count(&a));
+    }
+    println!("Ref count after all: {}", Rc::strong_count(&a));
+    // ** RC . Smart Pointers
 }
